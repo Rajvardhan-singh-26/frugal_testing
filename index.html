@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frugal Quizlet | Start</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="logo">Frugal Quizlet</div>
+        <button id="theme-toggle" class="theme-toggle">🌙</button>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h1>Ready to learn?</h1>
+            <p class="description">Select a topic or let AI generate a quiz for you.</p>
+
+            <!-- Mode Toggles -->
+            <div class="mode-toggle">
+                <button class="mode-btn active" data-mode="standard">Standard</button>
+                <button class="mode-btn" data-mode="ai">✨ AI Generator</button>
+            </div>
+
+            <!-- Standard Mode -->
+            <div id="mode-standard" class="mode-content">
+                <div class="form-group">
+                    <label for="category-select">Choose Category</label>
+                    <select id="category-select" data-test="category-dropdown">
+                        <option value="General">General Knowledge</option>
+                        <option value="Tech">Technology</option>
+                        <option value="Aptitude">Aptitude</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Select Difficulty</label>
+                    <div class="btn-group">
+                        <button class="difficulty-btn selected" data-value="easy" data-test="diff-easy">Easy</button>
+                        <button class="difficulty-btn" data-value="medium" data-test="diff-medium">Medium</button>
+                        <button class="difficulty-btn" data-value="hard" data-test="diff-hard">Hard</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Mode -->
+            <div id="mode-ai" class="mode-content" style="display: none;">
+                <div class="form-group">
+                    <label for="ai-topic">Enter Topic</label>
+                    <input type="text" id="ai-topic" placeholder="e.g. Quantum Physics, Taylor Swift, 19th Century Art"
+                        class="input-field" data-test="ai-topic">
+                </div>
+                <div class="form-group">
+                    <label for="ai-key">API Key (Optional)</label>
+                    <input type="password" id="ai-key" placeholder="Enter Gemini/OpenAI Key (Leave empty for Demo)"
+                        class="input-field" data-test="ai-key">
+                    <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">
+                        If empty, we'll simulate AI generation for testing.
+                    </small>
+                </div>
+            </div>
+
+            <button id="start-btn" class="btn-primary" data-test="start-quiz-btn">Start Quiz</button>
+            <div id="loading-spinner" class="spinner" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // UI Logic
+        const diffBtns = document.querySelectorAll('.difficulty-btn');
+        let selectedDiff = 'easy';
+        let currentMode = 'standard';
+
+        // Difficulty Selection
+        diffBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                diffBtns.forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedDiff = btn.dataset.value;
+            });
+        });
+
+        // Mode Switching
+        const modeBtns = document.querySelectorAll('.mode-btn');
+        modeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                modeBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMode = btn.dataset.mode;
+
+                document.getElementById('mode-standard').style.display = currentMode === 'standard' ? 'block' : 'none';
+                document.getElementById('mode-ai').style.display = currentMode === 'ai' ? 'block' : 'none';
+            });
+        });
+
+        // Start Button
+        const startBtn = document.getElementById('start-btn');
+        startBtn.addEventListener('click', async () => {
+            startBtn.disabled = true;
+
+            if (currentMode === 'standard') {
+                const category = document.getElementById('category-select').value;
+                localStorage.setItem('quizConfig', JSON.stringify({ mode: 'standard', category, difficulty: selectedDiff }));
+                window.location.href = 'quiz.html';
+            } else {
+                // AI Mode
+                const topic = document.getElementById('ai-topic').value;
+                const apiKey = document.getElementById('ai-key').value;
+
+                if (!topic) {
+                    alert("Please enter a topic!");
+                    startBtn.disabled = false;
+                    return;
+                }
+
+                // Show Loading
+                startBtn.innerText = "Generating Quiz...";
+                document.getElementById('loading-spinner').style.display = 'block';
+
+                try {
+                    // Pass config to quiz.html
+                    localStorage.setItem('quizConfig', JSON.stringify({
+                        mode: 'ai',
+                        topic: topic,
+                        apiKey: apiKey
+                    }));
+
+                    setTimeout(() => {
+                        window.location.href = 'quiz.html';
+                    }, 500);
+
+                } catch (e) {
+                    alert("Error: " + e.message);
+                    startBtn.disabled = false;
+                    startBtn.innerText = "Start Quiz";
+                }
+            }
+        });
+
+        // Theme Toggle
+        const themeBtn = document.getElementById('theme-toggle');
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+
+</html>

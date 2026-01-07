@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frugal Quizlet | Results</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="logo">Frugal Quizlet</div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h1>Performance Summary</h1>
+            <p class="description">Great job! Here is how you did.</p>
+
+            <div class="result-stats">
+                <div class="stat-circle score">
+                    <h3 id="percent-score">0%</h3>
+                    <span>Accuracy</span>
+                </div>
+                <div class="stat-circle">
+                    <h3 id="correct-count" style="color: var(--success-color);">0</h3>
+                    <span>Correct</span>
+                </div>
+                <div class="stat-circle">
+                    <h3 id="incorrect-count" style="color: var(--error-color);">0</h3>
+                    <span>Incorrect</span>
+                </div>
+            </div>
+
+            <div
+                style="margin: 2rem 0; height: 20px; background: #eee; border-radius: 10px; overflow: hidden; display: flex;">
+                <div id="bar-correct" style="height: 100%; background: var(--success-color); width: 0%;"></div>
+                <div id="bar-wrong" style="height: 100%; background: var(--error-color); width: 0%;"></div>
+            </div>
+
+            <h2>Detailed Analysis</h2>
+            <div id="breakdown" style="text-align: left;"></div>
+
+            <button onclick="window.location.href='index.html'" class="btn-primary" style="margin-top: 2rem;">Back to
+                Home</button>
+        </div>
+    </div>
+
+    <script>
+        const results = JSON.parse(localStorage.getItem('quizResults'));
+        if (results) {
+            const percentage = Math.round((results.score / results.total) * 100);
+            document.getElementById('percent-score').textContent = percentage + '%';
+            document.getElementById('correct-count').textContent = results.correct;
+            document.getElementById('incorrect-count').textContent = results.incorrect;
+
+            document.getElementById('bar-correct').style.width = percentage + '%';
+            document.getElementById('bar-wrong').style.width = (100 - percentage) + '%';
+
+            const container = document.getElementById('breakdown');
+            results.details.forEach((item, i) => {
+                const div = document.createElement('div');
+                div.style.borderBottom = '1px solid var(--border-color)';
+                div.style.padding = '1rem 0';
+                div.innerHTML = `
+                    <div style="font-weight: 600; margin-bottom: 0.5rem;">${i + 1}. ${item.question}</div>
+                    <div style="font-size: 0.9rem; color: ${item.isCorrect ? 'var(--success-color)' : 'var(--error-color)'};">
+                        You chose: ${item.userAnswer} ${item.isCorrect ? '✔' : '(Correct: ' + item.correctAnswer + ')'}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+    </script>
+</body>
+
+</html>
