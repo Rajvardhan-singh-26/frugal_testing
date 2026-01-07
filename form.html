@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frugal Testing | Registration</title>
+    <link rel="stylesheet" href="form_style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="page-container">
+        <div class="form-card">
+            <header>
+                <div class="logo">Frugal Testing</div>
+                <h1>Create Account</h1>
+                <p>Join the future of automation testing.</p>
+            </header>
+
+            <form id="registration-form" novalidate>
+                <!-- Personal Details -->
+                <div class="row">
+                    <div class="form-group">
+                        <label for="first-name">First Name</label>
+                        <input type="text" id="first-name" name="first-name" required data-test="first-name">
+                        <span class="error-msg">First Name is required</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="last-name">Last Name</label>
+                        <input type="text" id="last-name" name="last-name" required data-test="last-name">
+                        <span class="error-msg">Last Name is required</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required data-test="email">
+                    <span class="error-msg">Please enter a valid email</span>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required data-test="phone">
+                        <span class="error-msg">Valid phone number required</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="gender" value="male" required data-test="gender-male"> Male
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="gender" value="female" data-test="gender-female"> Female
+                            </label>
+                        </div>
+                        <span class="error-msg">Please select gender</span>
+                    </div>
+                </div>
+
+                <!-- Location Logic -->
+                <div class="row">
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <select id="country" name="country" required data-test="country">
+                            <option value="">Select Country</option>
+                            <!-- Populated by JS -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <select id="state" name="state" required disabled data-test="state">
+                            <option value="">Select State</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <select id="city" name="city" required disabled data-test="city">
+                            <option value="">Select City</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Security -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required minlength="8" data-test="password">
+                    <div class="password-strength">
+                        <div class="strength-bar"></div>
+                        <span class="strength-text">Weak</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required
+                        data-test="confirm-password">
+                    <span class="error-msg">Passwords do not match</span>
+                </div>
+
+                <!-- Terms -->
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="terms" name="terms" required data-test="terms">
+                    <label for="terms">I agree to the <a href="#">Terms & Conditions</a></label>
+                    <span class="error-msg">You must agree to continue</span>
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn-submit" disabled data-test="submit-btn">Create
+                    Account</button>
+            </form>
+
+            <div id="success-message" class="success-message hidden" data-test="success-message">
+                <h2>🎉 Success!</h2>
+                <p>Your account has been created.</p>
+                <button id="reset-btn" class="btn-secondary">Reset Form</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="form_script.js"></script>
+</body>
+
+</html>
