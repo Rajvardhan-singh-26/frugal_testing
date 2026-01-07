@@ -160,6 +160,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (allValid) {
+            // Save user data
+            const user = {
+                firstName: document.getElementById('first-name').value,
+                lastName: document.getElementById('last-name').value,
+                email: document.getElementById('email').value
+            };
+            localStorage.setItem('frugalUser', JSON.stringify(user));
+
             form.style.display = 'none';
             document.getElementById('success-message').classList.remove('hidden');
         }
@@ -172,5 +180,9 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.disabled = true;
         strengthBar.style.width = '0%';
         inputs.forEach(i => i.classList.remove('valid', 'invalid'));
+    });
+
+    document.getElementById('go-to-quiz-btn').addEventListener('click', () => {
+        window.location.href = 'index.html';
     });
 });

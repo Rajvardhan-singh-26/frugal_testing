@@ -23,6 +23,28 @@ const TIME_LIMIT = 10;
 async function init() {
     if (!questionText) return; // Not on quiz page
 
+    // Auth Check
+    const user = JSON.parse(localStorage.getItem('frugalUser'));
+    const greeting = document.getElementById('user-greeting');
+    const authSection = document.getElementById('auth-section');
+    const quizContent = document.getElementById('quiz-content');
+
+    if (!user) {
+        // Not Logged In
+        if (quizContent) quizContent.style.display = 'none';
+        if (authSection) authSection.style.display = 'block';
+        return; // Stop initialization
+    } else {
+        // Logged In
+        if (quizContent) quizContent.style.display = 'block';
+        if (authSection) authSection.style.display = 'none';
+        if (greeting) greeting.textContent = `Welcome, ${user.firstName}!`;
+
+        // Hide generic register link if present
+        const regLink = document.querySelector('.nav-btn');
+        if (regLink) regLink.style.display = 'none';
+    }
+
     const config = JSON.parse(localStorage.getItem('quizConfig')) || { mode: "standard", category: "General", difficulty: "easy" };
 
     // AI Mode Integration
